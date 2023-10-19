@@ -19,4 +19,6 @@ public class DbContext : Microsoft.EntityFrameworkCore.DbContext
     }
 
     public DbSet<Venue> Venues { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Product> Products { get; set; }
 }

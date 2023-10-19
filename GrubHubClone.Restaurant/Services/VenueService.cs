@@ -63,7 +63,7 @@ public class VenueService : IVenueService
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in VenueService.GetAllAsync.");
-            throw new ServiceException("Error retrieving venues.", ex); throw;
+            throw new ServiceException("Error retrieving venues.", ex);
         }
     }
 

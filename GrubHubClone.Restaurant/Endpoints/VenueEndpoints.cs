@@ -4,6 +4,7 @@ using GrubHubClone.Restaurant.Models;
 using GrubHubClone.Restaurant.Models.Dtos;
 using GrubHubClone.Restaurant.Models.Request.Venue;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 using System.Net;
 
 namespace GrubHubClone.Restaurant.Endpoints;
@@ -12,7 +13,9 @@ public static class VenueEndpoints
 {
     public static void MapVenueEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/venues");
+        var group = app
+            .MapGroup("api/venues")
+            .WithTags("Venue");
 
         group.MapPost("", CreateVenue);
 

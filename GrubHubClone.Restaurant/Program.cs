@@ -14,6 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DbContext>();
 builder.Services.AddTransient<IVenueRepository, VenueRepository>();
 builder.Services.AddTransient<IVenueService, VenueService>();
+builder.Services.AddTransient<IMenuService, MenuService>();
+builder.Services.AddTransient<IMenuRepository, MenuRepository>();
 builder.Services.AddLogging();
 
 var app = builder.Build();
@@ -24,7 +26,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MapMenuEndpoints();
 app.MapVenueEndpoints();
+
 app.UseHttpsRedirection();
 
 app.Run();
