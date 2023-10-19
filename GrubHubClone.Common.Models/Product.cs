@@ -1,4 +1,4 @@
-﻿namespace GrubHubClone.Restaurant.Models.Domain;
+﻿namespace GrubHubClone.Common.Models;
 
 public class Product
 {

@@ -13,4 +13,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GrubHubClone.Common.Dtos\GrubHubClone.Common.Dtos.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common.Exceptions\GrubHubClone.Common.Exceptions.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common.Models\GrubHubClone.Common.Models.csproj" />
+  </ItemGroup>
+
 </Project>

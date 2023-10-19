@@ -1,10 +1,7 @@
-﻿using GrubHubClone.Restaurant.Exceptions;
-using GrubHubClone.Restaurant.Interfaces;
-using GrubHubClone.Restaurant.Models;
+﻿using GrubHubClone.Restaurant.Interfaces;
 using GrubHubClone.Restaurant.Models.Dtos;
 using GrubHubClone.Restaurant.Models.Request.Venue;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel;
 using System.Net;
 
 namespace GrubHubClone.Restaurant.Endpoints;
@@ -63,7 +60,7 @@ public static class VenueEndpoints
     {
         try
         {
-            var newVenue = await vs.CreateAsync(new VenueDto 
+            var newVenue = await vs.CreateAsync(new VenueDto
             {
                 Name = venue.Name,
                 Description = venue.Description,
@@ -71,7 +68,7 @@ public static class VenueEndpoints
 
             return TypedResults.Ok(newVenue);
         }
-        catch 
+        catch
         {
             return TypedResults.StatusCode((int)HttpStatusCode.InternalServerError);
         }
@@ -82,7 +79,7 @@ public static class VenueEndpoints
     {
         try
         {
-            await vs.UpdateAsync(new VenueDto 
+            await vs.UpdateAsync(new VenueDto
             {
                 Id = venue.Id,
                 Name = venue.Name,

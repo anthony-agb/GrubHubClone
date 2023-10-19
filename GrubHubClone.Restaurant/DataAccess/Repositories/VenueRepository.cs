@@ -1,8 +1,7 @@
-﻿using GrubHubClone.Restaurant.Exceptions;
+﻿using GrubHubClone.Common.Exceptions;
+using GrubHubClone.Common.Models;
 using GrubHubClone.Restaurant.Interfaces;
-using GrubHubClone.Restaurant.Models.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace GrubHubClone.Restaurant.DataAccess.Repositories;
 
@@ -153,14 +152,14 @@ public class VenueRepository : IVenueRepository
                 throw new DataAccessException($"Failed to remove Venue with ID: '{id}'.");
             }
         }
-        catch (DataAccessException ex) 
+        catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in VenueRepository.RemoveAsync.");
             throw ex;
         }
         catch (Exception ex)
         {
-            _logger.LogError (ex, "Error in VenueRepository.RemoveAsync.");
+            _logger.LogError(ex, "Error in VenueRepository.RemoveAsync.");
             throw new DataAccessException("Error removing venue.", ex);
         }
     }

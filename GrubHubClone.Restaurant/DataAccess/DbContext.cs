@@ -1,4 +1,4 @@
-﻿using GrubHubClone.Restaurant.Models.Domain;
+﻿using GrubHubClone.Common.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GrubHubClone.Restaurant.DataAccess;

@@ -1,4 +1,4 @@
-﻿namespace GrubHubClone.Restaurant.Exceptions;
+﻿namespace GrubHubClone.Common.Exceptions;
 
 public class DataAccessException : Exception
 {

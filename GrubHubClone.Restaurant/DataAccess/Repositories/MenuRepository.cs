@@ -1,8 +1,7 @@
-﻿using GrubHubClone.Restaurant.Exceptions;
+﻿using GrubHubClone.Common.Exceptions;
+using GrubHubClone.Common.Models;
 using GrubHubClone.Restaurant.Interfaces;
-using GrubHubClone.Restaurant.Models.Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace GrubHubClone.Restaurant.DataAccess.Repositories;
 

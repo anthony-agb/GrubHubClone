@@ -25,11 +25,11 @@ public static class MenuEndpoints
         group.MapDelete("{venueId}/{menuId}", DeleteMenu);
     }
 
-    public static async Task<IResult> GetMenus(IMenuService vs, Guid id)
+    public static async Task<IResult> GetMenus(IMenuService vs)
     {
         try
         {
-            var menu = await vs.GetAllAsync(id);
+            var menu = await vs.GetAllAsync();
             return TypedResults.Ok(menu);
         }
         catch

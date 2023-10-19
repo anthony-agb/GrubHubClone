@@ -17,7 +17,7 @@ public static class ProductEndpoints
         group.MapDelete("{restaurantId}", DeleteProduct);
     }
 
-    public static Task<IResult> GetProducts() 
+    public static Task<IResult> GetProducts()
     {
         throw new NotImplementedException();
     }

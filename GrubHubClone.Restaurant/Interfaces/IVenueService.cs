@@ -1,6 +1,4 @@
-﻿using GrubHubClone.Restaurant.Models.Domain;
-using GrubHubClone.Restaurant.Models.Dtos;
-using GrubHubClone.Restaurant.Models.Request.Venue;
+﻿using GrubHubClone.Restaurant.Models.Dtos;
 
 namespace GrubHubClone.Restaurant.Interfaces
 {
