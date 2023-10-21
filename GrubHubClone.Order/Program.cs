@@ -1,9 +1,27 @@
+using GrubHubClone.Common.AzureServiceBus;
+using GrubHubClone.Order.Consumers;
+using GrubHubClone.Order.DataAccess;
+using GrubHubClone.Order.DataAccess.Repositories;
+using GrubHubClone.Order.Endpoints;
+using GrubHubClone.Order.Interfaces;
+using GrubHubClone.Order.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddLogging();
+builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddAzureServiceBus(cfg =>
+{
+    cfg.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
+});
+builder.Services.AddHostedService<TestConsumer>();
 
 var app = builder.Build();
 
@@ -14,31 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapOrderEndpoints();
+
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

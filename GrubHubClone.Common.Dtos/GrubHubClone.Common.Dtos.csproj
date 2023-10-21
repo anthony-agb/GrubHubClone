@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GrubHubClone.Common.Models\GrubHubClone.Common.Models.csproj" />
+  </ItemGroup>
+
 </Project>

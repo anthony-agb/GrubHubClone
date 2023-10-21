@@ -7,10 +7,10 @@ namespace GrubHubClone.Restaurant.DataAccess.Repositories;
 
 public class VenueRepository : IVenueRepository
 {
-    private readonly DbContext _db;
+    private readonly DatabaseContext _db;
     private readonly ILogger _logger;
 
-    public VenueRepository(DbContext db, ILogger<VenueRepository> logger)
+    public VenueRepository(DatabaseContext db, ILogger<VenueRepository> logger)
     {
         _db = db;
         _logger = logger;
@@ -26,7 +26,7 @@ public class VenueRepository : IVenueRepository
 
             if (venueExists == 1)
             {
-                throw new DataAccessException($"Venue with ID: '{venue.Id}' does not exist.");
+                throw new DataAccessException($"Venue with ID: '{venue.Id}' already exists.");
             }
 
             await _db.Venues.AddAsync(venue);

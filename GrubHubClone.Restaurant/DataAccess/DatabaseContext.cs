@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GrubHubClone.Restaurant.DataAccess;
 
-public class DbContext : Microsoft.EntityFrameworkCore.DbContext
+public class DatabaseContext : DbContext
 {
     protected readonly IConfiguration Configuration;
 
-    public DbContext(IConfiguration configuration)
+    public DatabaseContext(IConfiguration configuration)
     {
         Configuration = configuration;
     }

@@ -7,15 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataAccess\" />
-    <Folder Include="Endpoints\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\GrubHubClone.Common.Dtos\GrubHubClone.Common.Dtos.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common.Exceptions\GrubHubClone.Common.Exceptions.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common.Models\GrubHubClone.Common.Models.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common\GrubHubClone.Common.csproj" />
   </ItemGroup>
 
 </Project>

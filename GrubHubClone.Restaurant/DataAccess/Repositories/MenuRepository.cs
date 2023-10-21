@@ -7,10 +7,10 @@ namespace GrubHubClone.Restaurant.DataAccess.Repositories;
 
 public class MenuRepository : IMenuRepository
 {
-    private readonly DbContext _db;
+    private readonly DatabaseContext _db;
     private readonly ILogger _logger;
 
-    public MenuRepository(DbContext db, ILogger<MenuRepository> logger)
+    public MenuRepository(DatabaseContext db, ILogger<MenuRepository> logger)
     {
         _db = db;
         _logger = logger;
@@ -26,7 +26,7 @@ public class MenuRepository : IMenuRepository
 
             if (menuExists == 1)
             {
-                throw new DataAccessException($"Menu with ID: '{menu.Id}' does not exist.");
+                throw new DataAccessException($"Menu with ID: '{menu.Id}' already exists.");
             }
 
             await _db.Menus.AddAsync(menu);
