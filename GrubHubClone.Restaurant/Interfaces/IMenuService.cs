@@ -1,4 +1,4 @@
-﻿using GrubHubClone.Restaurant.Models.Dtos;
+﻿using GrubHubClone.Common.Dtos;
 
 namespace GrubHubClone.Restaurant.Interfaces
 {

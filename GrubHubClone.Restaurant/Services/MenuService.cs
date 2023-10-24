@@ -1,7 +1,7 @@
-﻿using GrubHubClone.Common.Exceptions;
+﻿using GrubHubClone.Common.Dtos;
+using GrubHubClone.Common.Exceptions;
 using GrubHubClone.Common.Models;
 using GrubHubClone.Restaurant.Interfaces;
-using GrubHubClone.Restaurant.Models.Dtos;
 
 namespace GrubHubClone.Restaurant.Services;
 

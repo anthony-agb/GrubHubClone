@@ -1,4 +1,4 @@
-﻿namespace GrubHubClone.Restaurant.Models.Dtos;
+﻿namespace GrubHubClone.Common.Dtos;
 
 public readonly record struct ProductDto(
     Guid Id,

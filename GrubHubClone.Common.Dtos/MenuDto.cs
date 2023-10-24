@@ -1,6 +1,6 @@
 ﻿using GrubHubClone.Common.Models;
 
-namespace GrubHubClone.Restaurant.Models.Dtos;
+namespace GrubHubClone.Common.Dtos;
 
 public readonly record struct MenuDto(
     Guid Id,
