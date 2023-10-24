@@ -1,5 +1,6 @@
 ﻿using GrubHubClone.Common.AzureServiceBus;
 using GrubHubClone.Common.Dtos;
+using GrubHubClone.Common.Dtos.MessageBus;
 using GrubHubClone.Common.Exceptions;
 using GrubHubClone.Common.Models;
 using GrubHubClone.Order.Consumers;
@@ -33,10 +34,15 @@ public class OrderService : IOrderService
                 UpdatedDate = DateTime.Now,
             });
 
-            //await _bus.Publish<TestCon>(message);
-            //var sender = _client.BusClient.CreateSender("test");
+            await _client.PublishAsync<OrderCreatedMessage>(new OrderCreatedMessage
+            {
+                Id = newOrder.Id,
+                Name = newOrder.Name,
+                Description = newOrder.Description,
+                TotlalPrice = newOrder.TotalPrice,
+                Status = "PaymentPending"
+            });
 
-            //await sender.SendMessageAsync(new ServiceBusMessage(message.Hello));
             return MapToDto(newOrder);
         }
         catch (DataAccessException ex)
@@ -48,8 +54,6 @@ public class OrderService : IOrderService
 
     public async Task<List<InvoiceDto>> GetAllAsync()
     {
-        var message = new TestCon("this is a test.");
-        await _client.PublishAsync<TestCon>(message);
         try
         {
             var orders = await _repository.GetAllAsync();

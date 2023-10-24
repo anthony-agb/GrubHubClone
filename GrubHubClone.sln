@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrubHubClone.Common.Dtos", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrubHubClone.Common.Exceptions", "GrubHubClone.Common.Exceptions\GrubHubClone.Common.Exceptions.csproj", "{8F5DD263-C781-4CD8-9B3D-289A24AE0853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrubHubClone.Common", "GrubHubClone.Common\GrubHubClone.Common.csproj", "{CDFB6A38-518C-4020-AF9A-C8C9A267CE63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrubHubClone.Common", "GrubHubClone.Common\GrubHubClone.Common.csproj", "{CDFB6A38-518C-4020-AF9A-C8C9A267CE63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrubHubClone.Payment", "GrubHubClone.Payment\GrubHubClone.Payment.csproj", "{A69B0CF6-9158-44AF-87E0-EB80D7A03D73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{CDFB6A38-518C-4020-AF9A-C8C9A267CE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFB6A38-518C-4020-AF9A-C8C9A267CE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDFB6A38-518C-4020-AF9A-C8C9A267CE63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69B0CF6-9158-44AF-87E0-EB80D7A03D73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69B0CF6-9158-44AF-87E0-EB80D7A03D73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69B0CF6-9158-44AF-87E0-EB80D7A03D73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69B0CF6-9158-44AF-87E0-EB80D7A03D73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
