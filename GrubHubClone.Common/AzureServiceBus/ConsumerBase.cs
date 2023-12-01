@@ -9,7 +9,7 @@ public abstract class ConsumerBase<T> : BackgroundService
 {
     private readonly IBusClient _busClient;
 
-    protected abstract Task CustomMessageProcessing(T message);
+    protected abstract Task ProcessMessage(T message);
 
     public ConsumerBase(IBusClient busClient)
     {
@@ -34,7 +34,7 @@ public abstract class ConsumerBase<T> : BackgroundService
 
                 if (msg == null) continue;
 
-                await CustomMessageProcessing(msg);
+                await ProcessMessage(msg);
 
                 await receiver.CompleteMessageAsync(message, stoppingToken);
             }

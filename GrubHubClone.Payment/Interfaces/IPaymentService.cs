@@ -1,10 +1,12 @@
-﻿using GrubHubClone.Common.Dtos.MessageBus;
+﻿using GrubHubClone.Common.Dtos;
+using GrubHubClone.Common.Dtos.MessageBus;
 
 namespace GrubHubClone.Payment.Interfaces
 {
     public interface IPaymentService
     {
-        Task PaymentConfirmed(string id);
-        Task StartPaymentProcess(OrderCreatedMessage order);
+        Task ConfirmPaymentAsync(Guid id);
+        Task<PaymentDto> GetByIdAsync(Guid id);
+        Task StartPaymentProcessAsync(OrderCreatedMessage order);
     }
 }

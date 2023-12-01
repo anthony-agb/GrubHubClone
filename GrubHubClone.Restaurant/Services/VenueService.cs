@@ -20,7 +20,7 @@ public class VenueService : IVenueService
     {
         try
         {
-            var newVenue = await _repository.CreateAsync(new Venue
+            var newVenue = await _repository.CreateAsync(new VenueModel
             {
                 Id = Guid.NewGuid(),
                 Name = venue.Name,
@@ -70,9 +70,9 @@ public class VenueService : IVenueService
     {
         try
         {
-            Venue oldData = await _repository.GetByIdAsync(venue.Id);
+            VenueModel oldData = await _repository.GetByIdAsync(venue.Id);
 
-            await _repository.UpdateAsync(new Venue
+            await _repository.UpdateAsync(new VenueModel
             {
                 Id = venue.Id,
                 Name = venue.Name,
@@ -101,7 +101,7 @@ public class VenueService : IVenueService
         }
     }
 
-    private VenueDto MapToDto(Venue venue)
+    private VenueDto MapToDto(VenueModel venue)
     {
         return new VenueDto
         {
@@ -111,7 +111,7 @@ public class VenueService : IVenueService
         };
     }
 
-    private List<VenueDto> MapToDto(List<Venue> venues)
+    private List<VenueDto> MapToDto(List<VenueModel> venues)
     {
         List<VenueDto> venueDtos = new();
 

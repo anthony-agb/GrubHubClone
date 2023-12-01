@@ -16,7 +16,7 @@ public class OrderRepository : IOrderRepository
         _logger = logger;
     }
 
-    public async Task<Invoice> CreateAsync(Invoice order)
+    public async Task<OrderModel> CreateAsync(OrderModel order)
     {
         try
         {
@@ -51,7 +51,7 @@ public class OrderRepository : IOrderRepository
         }
     }
 
-    public async Task<List<Invoice>> GetAllAsync()
+    public async Task<List<OrderModel>> GetAllAsync()
     {
         try
         {

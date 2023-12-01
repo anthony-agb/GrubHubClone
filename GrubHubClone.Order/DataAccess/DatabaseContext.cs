@@ -18,5 +18,5 @@ public class DatabaseContext : DbContext
         options.UseInMemoryDatabase("TestDb");
     }
 
-    public DbSet<Invoice> Orders { get; set; }
+    public DbSet<OrderModel> Orders { get; set; }
 }

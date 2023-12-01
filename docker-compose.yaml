@@ -1,0 +1,18 @@
+version: "3.3"
+services:
+ order:
+   build:
+     dockerfile: GrubHubClone.Order/Dockerfile
+     context: .
+   restart: on-failure
+   container_name: order-service
+   ports:
+     - '80:80'
+ payment:
+   build:
+     dockerfile: GrubHubClone.Payment/Dockerfile
+     context: .
+   restart: on-failure
+   container_name: payment-service
+   ports:
+     - '8081:80'

@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\GrubHubClone.Common.Enums\GrubHubClone.Common.Enums.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -6,5 +6,5 @@ public readonly record struct MenuDto(
     Guid Id,
     string Name,
     string Description,
-    List<Product> Products
+    List<ProductModel> Products
     );

@@ -4,21 +4,28 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>1d2c1b33-3e46-44a5-b278-d769682056f3</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\**" />
+    <Content Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Request\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GrubHubClone.Common.Dtos\GrubHubClone.Common.Dtos.csproj" />
+    <ProjectReference Include="..\GrubHubClone.Common.Enums\GrubHubClone.Common.Enums.csproj" />
     <ProjectReference Include="..\GrubHubClone.Common.Exceptions\GrubHubClone.Common.Exceptions.csproj" />
     <ProjectReference Include="..\GrubHubClone.Common.Models\GrubHubClone.Common.Models.csproj" />
     <ProjectReference Include="..\GrubHubClone.Common\GrubHubClone.Common.csproj" />

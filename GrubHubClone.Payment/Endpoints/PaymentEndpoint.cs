@@ -19,68 +19,41 @@ public static class PaymentEndpoint
             .MapGroup("api/payment")
             .WithTags("Payment");
 
-        group.MapGet("sse", ListenForPaymentUrl);
-        group.MapPost("Confirm", ConfirmPayment);
-        group.MapPost("test", Test);
+        group.MapGet("details/{id}", PaymentDetails);
+        group.MapPost("Confirm/{id}", ConfirmPayment);
     }
 
-    private static async Task Test(IServerSentEventsService sse)
+    private static async Task<IResult> PaymentDetails(HttpContext context, IPaymentService paymentService, string id)
     {
-        await sse.SendEventToClient<string>("test", "Hello, this is a test");
-        return;
-    }
-
-    private static async Task<IResult> ConfirmPayment(HttpContext context, IPaymentService paymentService)
-    {
-        if (!context.Request.Headers.ContainsKey("ClientId") && string.IsNullOrEmpty(context.Request.Headers["ClientId"]))
+        if (id == null) 
         {
-            return TypedResults.BadRequest("Missing headers \"ClientId\".");
+            return TypedResults.BadRequest("Missing payment ID.");
         }
 
-        var clientId = context.Request.Headers["ClientId"];
+        if (Guid.TryParse(id, out Guid parsedId)) 
+        {
+            return TypedResults.BadRequest("Invalid payment ID.");
+        }
 
-        await paymentService.PaymentConfirmed(clientId.ToString());
+        var payment = await paymentService.GetByIdAsync(parsedId);
+
+        return TypedResults.Ok(payment);
+    }
+
+    private static async Task<IResult> ConfirmPayment(HttpContext context, IPaymentService paymentService, string id)
+    {
+        if (id == null)
+        {
+            return TypedResults.BadRequest("Missing payment ID.");
+        }
+
+        if (Guid.TryParse(id, out Guid parsedId))
+        {
+            return TypedResults.BadRequest("Invalid payment ID.");
+        }
+
+        await paymentService.ConfirmPaymentAsync(parsedId);
 
         return TypedResults.Ok();
-    }
-
-    private static async Task ListenForPaymentUrl(HttpContext context, IServerSentEventsService sse)
-    {
-        try
-        {
-            var writer = sse.Init(context);
-
-            if (writer.Exception != null) 
-            {
-                throw new HttpRequestException(writer.Exception.InnerException!.Message);
-            }
-
-            string clientId = context.Request.Headers["ClientId"]!;
-
-            while (sse.ClientIsConnected(clientId))
-            {
-                await sse.SendQueuedMessagesToClient(clientId);
-                var eventTask = sse.GetTaskCompletion(clientId);
-
-                await eventTask.Task;
-            }
-
-            context.Response.OnCompleted(() => 
-            {
-                sse.CloseConnection(clientId);
-                return Task.CompletedTask;
-            });
-
-            sse.RemoveClient(clientId);
-
-            writer.Dispose();
-
-            return;
-        }
-        catch(HttpRequestException ex)
-        {
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            await context.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(ex.Message));
-        }
     }
 }

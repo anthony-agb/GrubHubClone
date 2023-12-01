@@ -20,7 +20,7 @@ public class MenuService : IMenuService
     {
         try
         {
-            var newMenu = await _repository.CreateAsync(new Menu
+            var newMenu = await _repository.CreateAsync(new MenuModel
             {
                 Id = Guid.NewGuid(),
                 Name = menu.Name,
@@ -70,9 +70,9 @@ public class MenuService : IMenuService
     {
         try
         {
-            Menu oldData = await _repository.GetByIdAsync(menu.Id);
+            MenuModel oldData = await _repository.GetByIdAsync(menu.Id);
 
-            await _repository.UpdateAsync(new Menu
+            await _repository.UpdateAsync(new MenuModel
             {
                 Id = menu.Id,
                 Name = menu.Name,
@@ -101,7 +101,7 @@ public class MenuService : IMenuService
         }
     }
 
-    private MenuDto MapToDto(Menu menu)
+    private MenuDto MapToDto(MenuModel menu)
     {
         return new MenuDto
         {
@@ -111,7 +111,7 @@ public class MenuService : IMenuService
         };
     }
 
-    private List<MenuDto> MapToDto(List<Menu> menus)
+    private List<MenuDto> MapToDto(List<MenuModel> menus)
     {
         List<MenuDto> menuDtos = new();
 

@@ -1,5 +1,5 @@
 ﻿using GrubHubClone.Restaurant.Interfaces;
-using GrubHubClone.Restaurant.Models.Dtos;
+using GrubHubClone.Common.Dtos;
 using GrubHubClone.Restaurant.Models.Request.Venue;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

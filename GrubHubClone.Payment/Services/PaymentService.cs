@@ -1,5 +1,9 @@
 ﻿using GrubHubClone.Common.AzureServiceBus;
+using GrubHubClone.Common.Dtos;
 using GrubHubClone.Common.Dtos.MessageBus;
+using GrubHubClone.Common.Enums;
+using GrubHubClone.Common.Exceptions;
+using GrubHubClone.Common.Models;
 using GrubHubClone.Common.ServerSentEvents;
 using GrubHubClone.Payment.Interfaces;
 using System.Runtime.Intrinsics.X86;
@@ -9,51 +13,79 @@ namespace GrubHubClone.Payment.Services;
 public class PaymentService : IPaymentService
 {
     private readonly IBusClient _busClient;
-    private readonly IServerSentEventsService _sseService;
+    private readonly ILogger<PaymentService> _logger;
+    private readonly IPaymentRepository _repository;
 
-    public PaymentService(IBusClient busClient, IServerSentEventsService sseService)
+    public PaymentService(IBusClient busClient, ILogger<PaymentService> logger, IPaymentRepository paymentRepository)
     {
         _busClient = busClient;
-        _sseService = sseService;
+        _logger = logger;
+        _repository = paymentRepository;
     }
 
-    public async Task StartPaymentProcess(OrderCreatedMessage order)
+    public async Task StartPaymentProcessAsync(OrderCreatedMessage order)
     {
-        string paymentUrl = $"https://paymemoney.pay/{order.Id}";
+        await _repository.CreateAsync(new PaymentModel 
+        {
+            Id = Guid.NewGuid(),
+            OrderId = order.Id,
+            Status = PaymentStatus.STARTED,
+            CreatedTime = DateTime.UtcNow,
+            UpdatedTime = DateTime.UtcNow,
+            ExpirationTime = DateTime.UtcNow.AddMinutes(15)
+        });
 
         await _busClient.PublishAsync<UpdateOrderStatusMessage>(new UpdateOrderStatusMessage
         {
             Id = order.Id,
-            Status = "ProcessingPayment"
+            Status = OrderStatus.PROCESSING_PAYMENT
         });
-
-        if (!_sseService.ClientIsConnected(order.Id.ToString())) 
-        {
-            _sseService.AddMessageToQueue(order.Id.ToString(), paymentUrl);
-            return;
-        }
-
-        await _sseService.SendEventToClient<string>(order.Id.ToString(), paymentUrl);
     }
 
-    public async Task PaymentConfirmed(string id)
+    public async Task<PaymentDto> GetByIdAsync(Guid id) 
     {
-        var updatedOrder = new UpdateOrderStatusMessage
+        var payment = await _repository.GetByIdAsync(id);
+
+        return new PaymentDto
         {
-            Id = Guid.Parse(id),
-            Status = "PaymentConfirmed",
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            Status = payment.Status,
+            CreatedTime = payment.CreatedTime,
+            UpdatedTime = payment.UpdatedTime,
+            ExpirationTime = payment.ExpirationTime
         };
+    }
 
-        await _busClient.PublishAsync<UpdateOrderStatusMessage>(updatedOrder);
+    public async Task ConfirmPaymentAsync(Guid id)
+    {
+        var payment = await _repository.GetByIdAsync(id);
 
-        if (!_sseService.ClientIsConnected(id.ToString())) 
+        if (payment == null)
         {
-            _sseService.AddMessageToQueue(id.ToString(), updatedOrder.Status);
-            return;
+            throw new ServiceException($"Payment with ID: '{id}' does not exist.");
         }
 
-        await _sseService.SendEventToClient<UpdateOrderStatusMessage>(id.ToString(), updatedOrder);
+        if (payment.Status != PaymentStatus.STARTED)
+        {
+            throw new ServiceException($"Payment with ID: '{id}' is not in STARTED status.");
+        }
 
-        //_sseService.RemoveClient(id.ToString());
+        await _repository.UpdateAsync(new PaymentModel
+        {
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            Status = PaymentStatus.CONFIRMED,
+            CreatedTime = payment.CreatedTime,
+            UpdatedTime = DateTime.UtcNow,
+            ExpirationTime = payment.ExpirationTime
+        });
+
+        await _busClient.PublishAsync<UpdateOrderStatusMessage>(new UpdateOrderStatusMessage
+        {
+            Id = id,
+            Status = OrderStatus.PAYED
+        });
+
     }
 }
