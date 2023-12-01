@@ -6,7 +6,7 @@ public class TestConsumer : ConsumerBase<TestCon>
 {
     public TestConsumer(IBusClient busClient) : base(busClient) { }
 
-    protected override Task CustomMessageProcessing(TestCon message)
+    protected override Task ProcessMessage(TestCon message)
     {
         Console.WriteLine(message);
         return Task.CompletedTask;

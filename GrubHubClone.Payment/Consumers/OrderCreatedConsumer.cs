@@ -13,8 +13,8 @@ public class OrderCreatedConsumer : ConsumerBase<OrderCreatedMessage>
         _paymentService = paymentService;
     }
 
-    protected override async Task CustomMessageProcessing(OrderCreatedMessage message)
+    protected override async Task ProcessMessage(OrderCreatedMessage message)
     {
-        await _paymentService.StartPaymentProcess(message);
+        await _paymentService.StartPaymentProcessAsync(message);
     }
 }

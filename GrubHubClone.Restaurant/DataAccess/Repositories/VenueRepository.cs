@@ -16,7 +16,7 @@ public class VenueRepository : IVenueRepository
         _logger = logger;
     }
 
-    public async Task<Venue> CreateAsync(Venue venue)
+    public async Task<VenueModel> CreateAsync(VenueModel venue)
     {
         try
         {
@@ -51,7 +51,7 @@ public class VenueRepository : IVenueRepository
         }
     }
 
-    public async Task<List<Venue>> GetAllAsync()
+    public async Task<List<VenueModel>> GetAllAsync()
     {
         try
         {
@@ -67,7 +67,7 @@ public class VenueRepository : IVenueRepository
         }
     }
 
-    public async Task<Venue> GetByIdAsync(Guid id)
+    public async Task<VenueModel> GetByIdAsync(Guid id)
     {
         try
         {
@@ -94,7 +94,7 @@ public class VenueRepository : IVenueRepository
         }
     }
 
-    public async Task UpdateAsync(Venue venue)
+    public async Task UpdateAsync(VenueModel venue)
     {
         try
         {

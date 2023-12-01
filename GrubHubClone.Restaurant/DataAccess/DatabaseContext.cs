@@ -18,7 +18,7 @@ public class DatabaseContext : DbContext
         options.UseInMemoryDatabase("TestDb");
     }
 
-    public DbSet<Venue> Venues { get; set; }
-    public DbSet<Menu> Menus { get; set; }
-    public DbSet<Product> Products { get; set; }
+    public DbSet<VenueModel> Venues { get; set; }
+    public DbSet<MenuModel> Menus { get; set; }
+    public DbSet<ProductModel> Products { get; set; }
 }

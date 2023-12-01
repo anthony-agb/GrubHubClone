@@ -16,7 +16,7 @@ public class MenuRepository : IMenuRepository
         _logger = logger;
     }
 
-    public async Task<Menu> CreateAsync(Menu menu)
+    public async Task<MenuModel> CreateAsync(MenuModel menu)
     {
         try
         {
@@ -51,7 +51,7 @@ public class MenuRepository : IMenuRepository
         }
     }
 
-    public async Task<List<Menu>> GetAllAsync()
+    public async Task<List<MenuModel>> GetAllAsync()
     {
         try
         {
@@ -67,7 +67,7 @@ public class MenuRepository : IMenuRepository
         }
     }
 
-    public async Task<Menu> GetByIdAsync(Guid id)
+    public async Task<MenuModel> GetByIdAsync(Guid id)
     {
         try
         {
@@ -94,7 +94,7 @@ public class MenuRepository : IMenuRepository
         }
     }
 
-    public async Task UpdateAsync(Menu menu)
+    public async Task UpdateAsync(MenuModel menu)
     {
         try
         {

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GrubHubClone.Common.Enums\GrubHubClone.Common.Enums.csproj" />
     <ProjectReference Include="..\GrubHubClone.Common.Models\GrubHubClone.Common.Models.csproj" />
   </ItemGroup>
 

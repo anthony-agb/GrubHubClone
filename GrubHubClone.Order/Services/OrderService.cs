@@ -25,7 +25,7 @@ public class OrderService : IOrderService
     {
         try
         {
-            var newOrder = await _repository.CreateAsync(new Invoice
+            var newOrder = await _repository.CreateAsync(new OrderModel
             {
                 Id = Guid.NewGuid(),
                 Name = order.Name,
@@ -66,7 +66,7 @@ public class OrderService : IOrderService
         }
     }
 
-    private InvoiceDto MapToDto(Invoice order)
+    private InvoiceDto MapToDto(OrderModel order)
     {
         return new InvoiceDto
         {
@@ -77,7 +77,7 @@ public class OrderService : IOrderService
         };
     }
 
-    private List<InvoiceDto> MapToDto(List<Invoice> orders)
+    private List<InvoiceDto> MapToDto(List<OrderModel> orders)
     {
         List<InvoiceDto> orderDtos = new();
 

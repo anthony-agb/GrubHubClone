@@ -5,10 +5,10 @@ namespace GrubHubClone.Restaurant.Interfaces
 {
     public interface IMenuRepository
     {
-        Task<Menu> CreateAsync(Menu menu);
-        Task<List<Menu>> GetAllAsync();
-        Task<Menu> GetByIdAsync(Guid id);
+        Task<MenuModel> CreateAsync(MenuModel menu);
+        Task<List<MenuModel>> GetAllAsync();
+        Task<MenuModel> GetByIdAsync(Guid id);
         Task RemoveAsync(Guid id);
-        Task UpdateAsync(Menu menu);
+        Task UpdateAsync(MenuModel menu);
     }
 }

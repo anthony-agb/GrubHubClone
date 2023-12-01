@@ -1,22 +1,22 @@
-﻿//using GrubHubClone.Common.Models;
-//using Microsoft.EntityFrameworkCore;
+﻿using GrubHubClone.Common.Models;
+using Microsoft.EntityFrameworkCore;
 
-//namespace GrubHubClone.Payment.DataAccess;
+namespace GrubHubClone.Payment.DataAccess;
 
-//public class DatabaseContext : DbContext
-//{
-//    protected readonly IConfiguration Configuration;
+public class DatabaseContext : DbContext
+{
+    protected readonly IConfiguration Configuration;
 
-//    public DatabaseContext(IConfiguration configuration)
-//    {
-//        Configuration = configuration;
-//    }
+    public DatabaseContext(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder options)
-//    {
-//        // in memory database used for simplicity, change to a real db for production applications
-//        options.UseInMemoryDatabase("TestDb");
-//    }
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+        // in memory database used for simplicity, change to a real db for production applications
+        options.UseInMemoryDatabase("TestDb");
+    }
 
-//    //public DbSet<Venue> Venues { get; set; }
-//}
+    public DbSet<PaymentModel> Payments { get; set; }
+}
