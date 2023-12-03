@@ -1,6 +1,7 @@
 ﻿using GrubHubClone.Common.AzureServiceBus;
 using GrubHubClone.Common.Dtos;
 using GrubHubClone.Common.Dtos.MessageBus;
+using GrubHubClone.Common.Enums;
 using GrubHubClone.Common.Exceptions;
 using GrubHubClone.Common.Models;
 using GrubHubClone.Order.Consumers;
@@ -21,26 +22,24 @@ public class OrderService : IOrderService
         _client = client;
     }
 
-    public async Task<InvoiceDto> CreateAsync(InvoiceDto order)
+    public async Task<OrderDto> CreateAsync(OrderDto order)
     {
         try
         {
             var newOrder = await _repository.CreateAsync(new OrderModel
             {
                 Id = Guid.NewGuid(),
-                Name = order.Name,
-                Description = order.Description,
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
+                TotalPrice = order.TotalPrice,
+                Status = OrderStatus.CREATED,
+                CreatedTime = DateTime.UtcNow,
+                UpdatedTime = DateTime.UtcNow,
             });
 
             await _client.PublishAsync<OrderCreatedMessage>(new OrderCreatedMessage
             {
                 Id = newOrder.Id,
-                Name = newOrder.Name,
-                Description = newOrder.Description,
                 TotlalPrice = newOrder.TotalPrice,
-                Status = "PaymentPending"
+                Status = OrderStatus.CREATED
             });
 
             return MapToDto(newOrder);
@@ -52,7 +51,7 @@ public class OrderService : IOrderService
         }
     }
 
-    public async Task<List<InvoiceDto>> GetAllAsync()
+    public async Task<List<OrderDto>> GetAllAsync()
     {
         try
         {
@@ -66,29 +65,73 @@ public class OrderService : IOrderService
         }
     }
 
-    private InvoiceDto MapToDto(OrderModel order)
+
+    public async Task<OrderDto> GetByIdAsync(Guid id)
     {
-        return new InvoiceDto
+        try
+        {
+            var order = await _repository.GetByIdAsync(id);
+
+            if (order == null) throw new Exception($"Order with ID: {id} does not exist.");
+
+            return MapToDto(order);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task UpdateStatusAsync(OrderDto order) 
+    {
+        try
+        {
+            await _repository.UpdateStatusAsync(new OrderModel 
+            {
+                Id = order.Id,
+                Status = order.Status
+            });
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task UpdateAsync(OrderDto order)
+    {
+        await _repository.UpdateAsync(new OrderModel
+        {
+            Id = Guid.NewGuid(),
+            UpdatedTime = DateTime.Now,
+        });
+    }
+
+    private OrderDto MapToDto(OrderModel order)
+    {
+        return new OrderDto
         {
             Id = order.Id,
-            Name = order.Name,
-            Description = order.Description,
             TotalPrice = order.TotalPrice,
+            Status = order.Status,
+            CreatedTime = order.CreatedTime,
+            UpdatedTime = order.UpdatedTime
         };
     }
 
-    private List<InvoiceDto> MapToDto(List<OrderModel> orders)
+    private List<OrderDto> MapToDto(List<OrderModel> orders)
     {
-        List<InvoiceDto> orderDtos = new();
+        List<OrderDto> orderDtos = new();
 
         foreach (var order in orders)
         {
-            orderDtos.Add(new InvoiceDto
+            orderDtos.Add(new OrderDto
             {
                 Id = order.Id,
-                Name = order.Name,
-                Description = order.Description,
                 TotalPrice = order.TotalPrice,
+                Status = order.Status,
+                CreatedTime = order.CreatedTime,
+                UpdatedTime = order.UpdatedTime
             });
         }
 

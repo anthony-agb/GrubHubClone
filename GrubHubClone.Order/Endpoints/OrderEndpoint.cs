@@ -19,11 +19,11 @@ public static class OrderEndpoints
         group.MapGet("", GetOrders);
     }
 
-    public static async Task<IResult> GetOrders(IOrderService vs)
+    public static async Task<IResult> GetOrders(IOrderService orderService)
     {
         try
         {
-            var order = await vs.GetAllAsync();
+            var order = await orderService.GetAllAsync();
             return TypedResults.Ok(order);
         }
         catch
@@ -37,10 +37,9 @@ public static class OrderEndpoints
     {
         try
         {
-            var newOrder = await vs.CreateAsync(new InvoiceDto
+            var newOrder = await vs.CreateAsync(new OrderDto
             {
-                Name = order.Name,
-                Description = order.Description,
+                TotalPrice = order.TotalPrice,
             });
 
             return TypedResults.Ok(newOrder);

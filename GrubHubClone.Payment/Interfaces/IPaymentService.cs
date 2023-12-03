@@ -7,6 +7,7 @@ namespace GrubHubClone.Payment.Interfaces
     {
         Task ConfirmPaymentAsync(Guid id);
         Task<PaymentDto> GetByIdAsync(Guid id);
+        Task<PaymentDto> GetByOrderIdAsync(Guid id);
         Task StartPaymentProcessAsync(OrderCreatedMessage order);
     }
 }

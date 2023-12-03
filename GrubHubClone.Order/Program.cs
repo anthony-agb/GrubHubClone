@@ -21,7 +21,7 @@ builder.Services.AddAzureServiceBus(cfg =>
 {
     cfg.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
 });
-builder.Services.AddHostedService<TestConsumer>();
+builder.Services.AddHostedService<OrderStatusChangedConsumer>();
 
 var app = builder.Build();
 

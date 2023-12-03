@@ -8,6 +8,7 @@ namespace GrubHubClone.Common.Enums;
 
 public enum PaymentStatus
 {
+    UNDEFINED,
     STARTED,
     CONFIRMED,
 }
