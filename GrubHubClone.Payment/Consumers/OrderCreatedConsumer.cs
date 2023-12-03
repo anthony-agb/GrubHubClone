@@ -8,9 +8,9 @@ public class OrderCreatedConsumer : ConsumerBase<OrderCreatedMessage>
 {
     private readonly IPaymentService _paymentService;
 
-    public OrderCreatedConsumer(IBusClient busClient, IPaymentService paymentService) : base(busClient)
+    public OrderCreatedConsumer(IBusClient busClient, IServiceScopeFactory factory) : base(busClient)
     {
-        _paymentService = paymentService;
+        _paymentService = factory.CreateScope().ServiceProvider.GetRequiredService<IPaymentService>();
     }
 
     protected override async Task ProcessMessage(OrderCreatedMessage message)

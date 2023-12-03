@@ -8,6 +8,7 @@ namespace GrubHubClone.Common.Enums;
 
 public enum OrderStatus
 {
+    UNDEFINED,
     CREATED,
     PROCESSING_PAYMENT,
     PAYED,

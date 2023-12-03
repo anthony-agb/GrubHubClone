@@ -44,7 +44,7 @@ public class PaymentRepository : IPaymentRepository
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in PaymentRepository.CreateAsync.");
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {
@@ -87,7 +87,34 @@ public class PaymentRepository : IPaymentRepository
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in PaymentRepository.GetByIdAsync.");
-            throw ex;
+            throw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in PaymentRepository.GetByIdAsync.");
+            throw new DataAccessException("Error retrieving payment.", ex);
+        }
+    }
+
+    public async Task<PaymentModel> GetByOrderIdAsync(Guid id)
+    {
+        try
+        {
+            var payment = await _db.Payments
+                .Where(v => v.OrderId == id)
+                .FirstOrDefaultAsync();
+
+            if (payment == null)
+            {
+                throw new DataAccessException($"Payment with OrderID: '{id}' does not exist.");
+            }
+
+            return payment;
+        }
+        catch (DataAccessException ex)
+        {
+            _logger.LogError(ex, "Error in PaymentRepository.GetByIdAsync.");
+            throw;
         }
         catch (Exception ex)
         {
@@ -124,7 +151,7 @@ public class PaymentRepository : IPaymentRepository
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in PaymentRepository.UpdateAsync.");
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {
@@ -157,7 +184,7 @@ public class PaymentRepository : IPaymentRepository
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in PaymentRepository.RemoveAsync.");
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {

@@ -3,6 +3,8 @@
 using GrubHubClone.Common.AzureServiceBus;
 using GrubHubClone.Common.ServerSentEvents;
 using GrubHubClone.Payment.Consumers;
+using GrubHubClone.Payment.DataAccess;
+using GrubHubClone.Payment.DataAccess.Repositories;
 using GrubHubClone.Payment.Endpoints;
 using GrubHubClone.Payment.Interfaces;
 using GrubHubClone.Payment.Services;
@@ -14,7 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IServerSentEventsService, ServerSentEventsService>();
+builder.Services.AddDbContext<DatabaseContext>();
+
+builder.Services.AddTransient<IPaymentRepository, PaymentRepository>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 builder.Services.AddAzureServiceBus(cfg =>

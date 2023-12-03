@@ -30,12 +30,12 @@ public static class PaymentEndpoint
             return TypedResults.BadRequest("Missing payment ID.");
         }
 
-        if (Guid.TryParse(id, out Guid parsedId)) 
+        if (!Guid.TryParse(id, out Guid parsedId)) 
         {
             return TypedResults.BadRequest("Invalid payment ID.");
         }
 
-        var payment = await paymentService.GetByIdAsync(parsedId);
+        var payment = await paymentService.GetByOrderIdAsync(parsedId);
 
         return TypedResults.Ok(payment);
     }
@@ -47,7 +47,7 @@ public static class PaymentEndpoint
             return TypedResults.BadRequest("Missing payment ID.");
         }
 
-        if (Guid.TryParse(id, out Guid parsedId))
+        if (!Guid.TryParse(id, out Guid parsedId))
         {
             return TypedResults.BadRequest("Invalid payment ID.");
         }

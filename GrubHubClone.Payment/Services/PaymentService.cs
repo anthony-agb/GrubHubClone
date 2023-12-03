@@ -35,7 +35,7 @@ public class PaymentService : IPaymentService
             ExpirationTime = DateTime.UtcNow.AddMinutes(15)
         });
 
-        await _busClient.PublishAsync<UpdateOrderStatusMessage>(new UpdateOrderStatusMessage
+        await _busClient.PublishAsync<OrderStatusChangedMessage>(new OrderStatusChangedMessage
         {
             Id = order.Id,
             Status = OrderStatus.PROCESSING_PAYMENT
@@ -57,9 +57,24 @@ public class PaymentService : IPaymentService
         };
     }
 
+    public async Task<PaymentDto> GetByOrderIdAsync(Guid id)
+    {
+        var payment = await _repository.GetByOrderIdAsync(id);
+
+        return new PaymentDto
+        {
+            Id = payment.Id,
+            OrderId = payment.OrderId,
+            Status = payment.Status,
+            CreatedTime = payment.CreatedTime,
+            UpdatedTime = payment.UpdatedTime,
+            ExpirationTime = payment.ExpirationTime
+        };
+    }
+
     public async Task ConfirmPaymentAsync(Guid id)
     {
-        var payment = await _repository.GetByIdAsync(id);
+        var payment = await _repository.GetByOrderIdAsync(id);
 
         if (payment == null)
         {
@@ -81,11 +96,17 @@ public class PaymentService : IPaymentService
             ExpirationTime = payment.ExpirationTime
         });
 
-        await _busClient.PublishAsync<UpdateOrderStatusMessage>(new UpdateOrderStatusMessage
+        await _busClient.PublishAsync<OrderStatusChangedMessage>(new OrderStatusChangedMessage
         {
             Id = id,
             Status = OrderStatus.PAYED
         });
 
+        await _busClient.PublishAsync<SendEmailMessage>(new SendEmailMessage
+        {
+            Subject = $"Grubhub order: {payment.OrderId}",
+            SendTo = "Bob",
+            Body = "Thank you for ordering."
+        });
     }
 }

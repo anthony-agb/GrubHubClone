@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public readonly record struct UpdateOrderStatusMessage(
+namespace GrubHubClone.Common.Dtos.MessageBus;
+
+public readonly record struct OrderStatusChangedMessage(
     Guid Id,
     OrderStatus Status
     );

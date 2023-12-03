@@ -7,6 +7,7 @@ namespace GrubHubClone.Payment.Interfaces
         Task<PaymentModel> CreateAsync(PaymentModel payment);
         Task<List<PaymentModel>> GetAllAsync();
         Task<PaymentModel> GetByIdAsync(Guid id);
+        Task<PaymentModel> GetByOrderIdAsync(Guid id);
         Task RemoveAsync(Guid id);
         Task UpdateAsync(PaymentModel payment);
     }

@@ -6,5 +6,9 @@ namespace GrubHubClone.Order.Interfaces
     {
         Task<OrderModel> CreateAsync(OrderModel order);
         Task<List<OrderModel>> GetAllAsync();
+        Task<int> CountAsync(Guid id);
+        Task UpdateStatusAsync(OrderModel order);
+        Task UpdateAsync(OrderModel order);
+        Task<OrderModel> GetByIdAsync(Guid id);
     }
 }
