@@ -7,6 +7,10 @@ using GrubHubClone.Order.Endpoints;
 using GrubHubClone.Order.Interfaces;
 using GrubHubClone.Order.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
 using System.IdentityModel.Tokens.Jwt;
 using static System.Net.WebRequestMethods;
 
@@ -27,16 +31,34 @@ builder.Services.AddAzureServiceBus(cfg =>
 });
 builder.Services.AddHostedService<OrderStatusChangedConsumer>();
 
-builder.Services.AddAuth0JwtAuthentication(cfg => 
+IdentityModelEventSource.ShowPII = true;
+
+builder.Services.AddAuthentication(options =>
 {
-    //TODO: Change to read from configuration
-    cfg.Audience = "https://api.luxnex.net";
-    cfg.Authority = "https://dev-qepl2m1rxmm3zt3v.us.auth0.com/";
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = "https://dev-qepl2m1rxmm3zt3v.us.auth0.com/";
+    options.Audience = "https://api.luxnex.net";
+    //options.Authority = configuration.Authority;
+    //options.Audience = configuration.Audience;
 });
+
+//builder.Services.AddAuth0JwtAuthentication(cfg => 
+//{
+//    //TODO: Change to read from configuration
+//    cfg.Audience = "https://api.luxnex.net";
+//    cfg.Authority = "https://dev-qepl2m1rxmm3zt3v.us.auth0.com/";
+//});
 
 builder.Services.AddAuthorization(cfg => 
 {
-    cfg.AddPolicy("TestPolicy", x => x.RequireClaim("scope", "read:test"));
+    var scopeValues = new string[] { "read:test" };
+
+    var requirement = new ClaimsAuthorizationRequirement("scope", allowedValues: scopeValues);
+    var policy = new AuthorizationPolicy(new IAuthorizationRequirement[] { requirement }, new string[0]);
+    cfg.AddPolicy("TestPolicy", policy);
 });
 
 var app = builder.Build();
@@ -51,7 +73,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPost("test", () => Results.Ok()).RequireAuthorization();
+app.MapPost("test", () => Results.Ok()).RequireAuthorization("TestPolicy");
 
 app.MapOrderEndpoints();
 
