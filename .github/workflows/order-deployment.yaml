@@ -1,13 +1,12 @@
 name: Order Service Deployment
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
     paths:
       - 'GrubHubClone.Order/**'
-  workflow_dispatch:
-  #test change
 
 jobs:
   build-and-deploy:
