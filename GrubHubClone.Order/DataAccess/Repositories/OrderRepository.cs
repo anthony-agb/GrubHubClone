@@ -42,7 +42,7 @@ public class OrderRepository : IOrderRepository
         catch (DataAccessException ex)
         {
             _logger.LogError(ex, "Error in OrderRepository.CreateAsync.");
-            throw ex;
+            throw;
         }
         catch (Exception ex)
         {
