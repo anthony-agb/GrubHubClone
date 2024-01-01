@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "GrubHubClone.Azure.Notification": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7095",
+      "launchBrowser": false
+    }
+  }
+}
