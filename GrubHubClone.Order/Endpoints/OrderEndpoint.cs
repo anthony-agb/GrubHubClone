@@ -12,7 +12,8 @@ public static class OrderEndpoints
     {
         var group = app
             .MapGroup("api/order")
-            .WithTags("Order");
+            .WithTags("Order")
+            .RequireAuthorization("AuthPolicy");
 
         group.MapPost("", CreateOrder);
 

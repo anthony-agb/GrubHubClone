@@ -8,7 +8,10 @@ using GrubHubClone.Order.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +20,8 @@ string basePath = Directory.GetCurrentDirectory();
 
 string ConfigDirectory = Path.Combine(basePath, "Config", "appsettings.Production.json");
 
-IConfigurationRoot configuration = new ConfigurationBuilder()
+var Configuration = new ConfigurationBuilder()
     .SetBasePath(basePath)
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile(ConfigDirectory, optional: true, reloadOnChange: true)
     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
     .Build();
@@ -27,15 +29,42 @@ IConfigurationRoot configuration = new ConfigurationBuilder()
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(cfg =>
+{
+    cfg.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
 
-builder.Services.AddDbContext<DatabaseContext>();
+    cfg.AddSecurityRequirement(new OpenApiSecurityRequirement 
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" }
+            },
+            new string[] {}
+        }
+    });
+});
+
+builder.Services.AddDbContext<DatabaseContext>(cfg =>
+{
+    string connectionString = Configuration.GetConnectionString("AzureSqlDatabase") ?? throw new NullReferenceException("Could not read Azure SQL database connection string from settings.");
+    cfg.UseSqlServer(connectionString);
+});
+
 builder.Services.AddLogging();
 builder.Services.AddTransient<IOrderRepository, OrderRepository>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddAzureServiceBus(cfg =>
 {
-    cfg.ConnectionString = configuration.GetConnectionString("AzureServiceBus");
+    cfg.ConnectionString = Configuration.GetConnectionString("AzureServiceBus");
 });
 builder.Services.AddHostedService<OrderStatusChangedConsumer>();
 
@@ -47,18 +76,18 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.Authority = configuration.GetValue<string>("Auth0:Authority") ?? throw new NullReferenceException("JWT authority could not be read from configuration.");
-    options.Audience = configuration.GetValue<string>("Auth0:Audience") ?? throw new NullReferenceException("JWT audience could not be read from configuration.");
+    options.Authority = Configuration.GetValue<string>("Auth0:Authority") ?? throw new NullReferenceException("JWT authority could not be read from configuration.");
+    options.Audience = Configuration.GetValue<string>("Auth0:Audience") ?? throw new NullReferenceException("JWT audience could not be read from configuration.");
 });
 
-builder.Services.AddAuthorization(cfg => 
+builder.Services.AddAuthorization(cfg =>
 {
     var scopeValues = new string[] { "read:test" };
 
-    var requirement = new ClaimsAuthorizationRequirement("scope", allowedValues: scopeValues);
+    var requirement = new ClaimsAuthorizationRequirement("permissions", allowedValues: scopeValues);
     var policy = new AuthorizationPolicy(new IAuthorizationRequirement[] { requirement }, Array.Empty<string>());
 
-    cfg.AddPolicy("TestPolicy", policy);
+    cfg.AddPolicy("AuthPolicy", policy);
 });
 
 var app = builder.Build();
@@ -75,7 +104,7 @@ app.UseAuthorization();
 
 //Test endpoint for auth
 app.MapPost("test", () => Results.Ok())
-    .RequireAuthorization("TestPolicy");
+    .RequireAuthorization("AuthPolicy");
 
 app.MapOrderEndpoints();
 
