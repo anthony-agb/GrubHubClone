@@ -66,7 +66,7 @@ builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 builder.Services.AddAzureServiceBus(cfg =>
 {
-    cfg.ConnectionString = builder.Configuration.GetConnectionString("AzureServiceBus");
+    cfg.ConnectionString = Configuration.GetConnectionString("AzureServiceBus");
 });
 builder.Services.AddHostedService<OrderCreatedConsumer>();
 
@@ -92,10 +92,10 @@ builder.Services.AddAuthorization(cfg =>
     cfg.AddPolicy("AuthPolicy", policy);
 });
 
-builder.Services.AddCors(policyBuilder =>
-    policyBuilder.AddDefaultPolicy(policy =>
-        policy.WithOrigins("*").AllowAnyHeader().AllowAnyHeader())
-);
+//builder.Services.AddCors(policyBuilder =>
+//    policyBuilder.AddDefaultPolicy(policy =>
+//        policy.WithOrigins("*").AllowAnyHeader().AllowAnyHeader())
+//);
 
 var app = builder.Build();
 
