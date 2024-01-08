@@ -109,7 +109,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors();
+//app.UseCors();
 app.AddPaymentEndpoints();
 
 app.UseHttpsRedirection();
