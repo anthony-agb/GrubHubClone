@@ -17,7 +17,8 @@ public static class PaymentEndpoint
     {
         var group = app
             .MapGroup("api/payment")
-            .WithTags("Payment");
+            .WithTags("Payment")
+            .RequireAuthorization("AuthPolicy");
 
         group.MapGet("details/{id}", PaymentDetails);
         group.MapPost("Confirm/{id}", ConfirmPayment);
