@@ -1,0 +1,32 @@
+name: Docker scout vulnerability scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  image_scan:
+   name: Build Image and Run Image Scan
+   runs-on: ubuntu-latest
+
+   steps:
+   - name: Checkout code
+     uses: actions/checkout@v4
+
+   - name: Set up Docker
+     uses: docker-practice/actions-setup-docker@v1
+     with:
+      docker_version: '24.0.7'
+
+   - name: Build Docker Images
+     run: |
+      docker build -f GrubHubClone.Order/Dockerfile -t ghc-order-local:latest .
+      docker build -f GrubHubClone.Payment/Dockerfile -t ghc-payment-local:latest .
+
+   - name: Docker Scout Scan
+     uses: docker/scout-action@v1.2.2
+     with:
+       dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}
+       dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+       command: quickview,cves
