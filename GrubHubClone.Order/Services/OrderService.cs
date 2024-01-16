@@ -29,7 +29,10 @@ public class OrderService : IOrderService
             var newOrder = await _repository.CreateAsync(new OrderModel
             {
                 Id = Guid.NewGuid(),
+                CustomerId = order.CustomerId,
+                RestaurantId = order.RestaurantId,
                 TotalPrice = order.TotalPrice,
+                Products = MapToOrderProductModel(order),
                 Status = OrderStatus.CREATED,
                 CreatedTime = DateTime.UtcNow,
                 UpdatedTime = DateTime.UtcNow,
@@ -112,7 +115,12 @@ public class OrderService : IOrderService
         return new OrderDto
         {
             Id = order.Id,
+            CustomerId = order.CustomerId,
+            RestaurantId = order.RestaurantId,
             TotalPrice = order.TotalPrice,
+            Products = order.Products
+            .Select(x => x.ProductId)
+            .ToList(),
             Status = order.Status,
             CreatedTime = order.CreatedTime,
             UpdatedTime = order.UpdatedTime
@@ -128,7 +136,12 @@ public class OrderService : IOrderService
             orderDtos.Add(new OrderDto
             {
                 Id = order.Id,
+                CustomerId = order.CustomerId,
+                RestaurantId = order.RestaurantId,
                 TotalPrice = order.TotalPrice,
+                Products = order.Products
+                .Select(x => x.ProductId)
+                .ToList(),
                 Status = order.Status,
                 CreatedTime = order.CreatedTime,
                 UpdatedTime = order.UpdatedTime
@@ -136,5 +149,21 @@ public class OrderService : IOrderService
         }
 
         return orderDtos;
+    }
+
+    private List<OrderProductModel> MapToOrderProductModel(OrderDto order) 
+    {
+        List<OrderProductModel> orderProductModels = new();
+
+        foreach (var product in order.Products) 
+        {
+            orderProductModels.Add(new OrderProductModel
+            {
+                OrderId = order.Id,
+                ProductId = product
+            });
+        }
+
+        return orderProductModels;
     }
 }

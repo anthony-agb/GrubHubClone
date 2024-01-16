@@ -30,6 +30,9 @@ public class OrderRepository : IOrderRepository
             }
 
             await _db.Orders.AddAsync(order);
+
+            _db.OrderProducts.AddRange(order.Products);
+
             int success = await _db.SaveChangesAsync();
 
             if (success == 0)
@@ -56,6 +59,7 @@ public class OrderRepository : IOrderRepository
         try
         {
             var Orders = await _db.Orders
+                .Include(x => x.Products)
                 .ToListAsync();
 
             return Orders;

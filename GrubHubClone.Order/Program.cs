@@ -111,3 +111,5 @@ app.MapOrderEndpoints();
 app.UseHttpsRedirection();
 
 app.Run();
+
+public partial class Program { }
