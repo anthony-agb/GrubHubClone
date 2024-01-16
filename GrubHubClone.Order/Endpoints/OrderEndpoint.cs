@@ -40,7 +40,10 @@ public static class OrderEndpoints
         {
             var newOrder = await vs.CreateAsync(new OrderDto
             {
+                CustomerId = order.CustomerId,
+                RestaurantId = order.RestaurantId,
                 TotalPrice = order.TotalPrice,
+                Products = order.Products,
             });
 
             return TypedResults.Ok(newOrder);
